@@ -1,0 +1,64 @@
+@startuml
+
+title "Participants - Sequence Diagram"
+autonumber 10 10 "<b>[000]:"
+
+control CLI as cli
+participant CSV as csv
+participant Engine as core
+
+== cargo run -- transactions.csv > accounts.csv ==
+
+create database Ledger as db
+cli -> db: new
+
+cli -> csv: Read transactions
+activate csv
+csv --> cli: iterator<Transactions>
+deactivate csv
+
+loop Iterate all transactions times
+	cli -> core : process transaction (tx)
+	activate core
+	
+	alt Deposit
+	
+		core -> db: deposit(tx.client, tx.amount)
+	
+	else Withdrawal
+	
+		core -> db: withdrawal(tx.client, tx.amount)
+	
+	else Dispute
+	
+		core -> db: dispute(tx.client, tx.amount)
+	
+	else Resolve
+	
+		core -> db: resolve(tx.client, tx.amount)
+	
+	else Chargeback
+	
+		core -> db: chargeback(tx.client, tx.amount)
+	
+	end
+	
+	core --> cli: Ok()
+	deactivate core
+end
+
+	cli -> db: get history
+	activate db
+	db --> cli: iterator<Report>
+	deactivate db
+	
+	loop Iterate all status
+	
+		cli -> csv: serialize(stdout, account status)
+		activate csv
+		csv --> cli: Ok()
+		deactivate csv
+	
+	end
+
+@enduml

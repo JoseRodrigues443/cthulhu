@@ -1,0 +1,29 @@
+[package]
+name = "cthulhu"
+version = "0.1.0"
+edition = "2021"
+authors = ["José Rodrigues <josemiguel443@gmail.com>"]
+license = "GNU3"
+publish = false
+description = """\
+A simple payments engine that reads a series of transactions from a CSV, updates client accounts,  \
+handles disputes and chargebacks, and then outputs the state of clients accounts as a CSV. \
+"""
+readme = "README.md"
+keywords = ["payments", "ledger", "csv", "transactions"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "3.1.2", features = ["derive"] }
+csv = "1.1.5"
+serde = { version = "1", features = ["derive"] }
+rust_decimal = "1.8.1"
+stringreader = "0.1.1"
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "bench"
+harness = false

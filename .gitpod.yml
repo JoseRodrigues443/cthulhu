@@ -1,0 +1,6 @@
+tasks:
+  - init: /workspace/cthulhu/install.sh
+
+vscode:
+  extensions:
+    - rust-lang.rust@0.7.8
